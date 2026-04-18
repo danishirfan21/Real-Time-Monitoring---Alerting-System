@@ -1,6 +1,6 @@
 # Real-Time Monitoring & Alerting System
 
-A simple Spring Boot service that exposes business metrics using Actuator and Micrometer, configured for Prometheus scraping and Grafana visualization.
+A simple Spring Boot service that exposes business metrics using Actuator and Micrometer, configured for Prometheus scraping, Grafana visualization, and Prometheus alerting.
 
 ## Prerequisites
 
@@ -58,7 +58,29 @@ Access Grafana UI at `http://localhost:3000` (Default login: `admin`/`admin`).
 3. Select the Prometheus data source you just created.
 4. Click **Import**.
 
-## Demo Flow
+## Alerting
+
+Alert rules are defined in `alerts.yml` and loaded by Prometheus.
+
+### View Active Alerts
+
+Open the Prometheus Alerts page: `http://localhost:9090/alerts`
+
+### Demo: Trigger Failed Order Alert
+
+1. Start the App and Prometheus.
+2. Repeatedly call the failure endpoint:
+   ```bash
+   curl -X POST http://localhost:8080/orders/fail
+   ```
+3. Watch the `HighFailedOrderRate` alert in Prometheus UI. It will move from **Inactive** to **Pending**, and then to **Firing** after 30 seconds of sustained failure rate.
+
+### Demo: Trigger Application Down Alert
+
+1. Stop the Spring Boot application (Ctrl+C).
+2. Observe the `ApplicationDown` alert in Prometheus UI moving to **Firing** state.
+
+## Demo Flow (Visualization)
 
 1. Start all components (App, Prometheus, Grafana).
 2. Open the **Real-Time Monitoring Dashboard** in Grafana.
