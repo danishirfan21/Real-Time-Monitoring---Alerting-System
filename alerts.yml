@@ -1,0 +1,22 @@
+groups:
+  - name: order-alerts
+    rules:
+      - alert: HighFailedOrderRate
+        expr: rate(orders_failed_total[1m]) > 0
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High failed order rate detected"
+          description: "The rate of failed orders is above 0 for more than 30 seconds."
+
+  - name: availability-alerts
+    rules:
+      - alert: ApplicationDown
+        expr: up == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Spring Boot application is down"
+          description: "The application target at localhost:8080 is unreachable."

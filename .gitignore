@@ -1,0 +1,12 @@
+target/
+.mvn/
+.idea/
+.vscode/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+*.bak
+*.swp
+*.tmp
