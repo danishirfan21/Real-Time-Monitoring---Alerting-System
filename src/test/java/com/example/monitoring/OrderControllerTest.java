@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,11 +37,9 @@ public class OrderControllerTest {
     void testFailedOrderIncrementsCounter() throws Exception {
         double initialCount = meterRegistry.get("orders_failed_total").counter().count();
 
-        try {
-            mockMvc.perform(post("/orders/fail"));
-        } catch (Exception e) {
-            // Expected
-        }
+        assertThatThrownBy(() -> mockMvc.perform(post("/orders/fail")))
+                .hasCauseInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Simulated order failure");
 
         double finalCount = meterRegistry.get("orders_failed_total").counter().count();
         assertThat(finalCount).isEqualTo(initialCount + 1);
